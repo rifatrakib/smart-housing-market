@@ -1,0 +1,35 @@
+services:
+  client:
+    container_name: client
+    build:
+      context: ./client
+    working_dir: /client
+    command: npm run dev
+    volumes:
+      - ./client:/client
+    ports:
+      - "5173:5173"
+    restart: on-failure
+    networks:
+      - public_network
+
+  api:
+    container_name: api
+    build:
+      context: ./api
+    working_dir: /api
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+    env_file:
+      - api/.env
+    volumes:
+      - ./api:/api
+    ports:
+      - "8000:8000"
+    restart: on-failure
+    networks:
+      - public_network
+      - private_network
+
+networks:
+  public_network:
+  private_network:
