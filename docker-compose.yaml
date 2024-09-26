@@ -1,7 +1,7 @@
 services:
   client:
     container_name: client
-    image: rifatrakib/shm-client:test
+    image: rifatrakib/shm-client:beta
     volumes:
       - ./client:/client
       - /client/node_modules
@@ -15,7 +15,7 @@ services:
 
   api:
     container_name: api
-    image: rifatrakib/shm-api:test
+    image: rifatrakib/shm-api:beta
     env_file:
       - api/.env
     volumes:
