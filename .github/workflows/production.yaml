@@ -1,9 +1,9 @@
-name: Publish Docker images for staging environment
+name: Publish Docker images for production environment
 
 on:
   push:
     branches:
-      - develop
+      - master
 
 jobs:
   push_api_image:
@@ -31,7 +31,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: ${{ secrets.DOCKERHUB_USERNAME }}/shm-api:beta
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/shm-api:latest
 
       - name: Build and push API Docker image
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
@@ -39,7 +39,7 @@ jobs:
           context: ./api
           file: ${{ steps.dockerfile.outputs.dockerfile }}
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/shm-api:beta
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/shm-api:latest
           labels: ${{ steps.meta.outputs.labels }}
 
   push_client_image:
@@ -67,7 +67,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: ${{ secrets.DOCKERHUB_USERNAME }}/shm-client:beta
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/shm-client:latest
 
       - name: Build and push Client Docker image
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
@@ -75,5 +75,5 @@ jobs:
           context: ./client
           file: ${{ steps.dockerfile.outputs.dockerfile }}
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/shm-client:beta
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/shm-client:latest
           labels: ${{ steps.meta.outputs.labels }}
