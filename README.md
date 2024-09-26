@@ -1,11 +1,10 @@
 # Smart Housing Market
 
-This repository contains the source code for the course project of *Software Project Management (研一)* and *Software Requirement Engineering (研二)* completed in a joint effort of [Md Abdur Rakib](https://www.linkedin.com/in/md-abdur-rakib-1508/), Tomal, and Babu. The project mainly focuses on corporate practices followed within a team of engineers at a real workplace via a framework decided by the organization, but as this project is done in order to learn, the process has been simulated at a lower scale.
+This repository contains the source code for the course project of *Software Project Management (研一)* and *Software Requirement Engineering (研二)* completed in a joint effort of [Md Abdur Rakib](https://www.linkedin.com/in/md-abdur-rakib-1508/), [Md Talat Mahmud Tomal](https://www.linkedin.com/in/talatmcc), and [S.B. Babu](https://www.linkedin.com/in/s-b-babu-09071332b/). The project mainly focuses on corporate practices followed within a team of engineers at a real workplace via a framework decided by the organization, but as this project is done in order to learn, the process has been simulated at a lower scale.
 
 ## Related Project
 
 You can find the projects we defined and documented for this application in the `Projects` tab of this repository. Please find the *open* projects here: [https://github.com/rifatrakib/smart-housing-market/projects?query=is%3Aopen](https://github.com/rifatrakib/smart-housing-market/projects?query=is%3Aopen) and the *closed* projects here: [https://github.com/rifatrakib/smart-housing-market/projects?query=is%3Aclosed](https://github.com/rifatrakib/smart-housing-market/projects?query=is%3Aclosed). By the time we complete this application, all these projects should have *closed* status.
-
 
 ### Components
 
@@ -50,7 +49,6 @@ python manage.py deploy
 this will show you the available modes and allow you to type your input.
 
 **THAT'S IT!** This will deploy the application on docker and you can access the client application using `http://127.0.0.1:5173` and the server side application will be available on the host `http://127.0.0.1:8000`.
-
 
 ##### Manual approach
 
