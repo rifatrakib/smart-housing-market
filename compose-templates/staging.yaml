@@ -1,0 +1,32 @@
+services:
+  client:
+    container_name: client
+    image: rifatrakib/shm-client:beta
+    volumes:
+      - ./client:/client
+      - /client/node_modules
+    ports:
+      - "5173:5173"
+    restart: on-failure
+    networks:
+      - public_network
+    depends_on:
+      - api
+
+  api:
+    container_name: api
+    image: rifatrakib/shm-api:beta
+    env_file:
+      - api/.env
+    volumes:
+      - ./api:/api
+    ports:
+      - "8000:8000"
+    restart: on-failure
+    networks:
+      - public_network
+      - private_network
+
+networks:
+  public_network:
+  private_network:
