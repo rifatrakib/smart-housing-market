@@ -1,0 +1,79 @@
+name: Publish Docker images for staging environment
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  push_api_image:
+    name: Push API Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Determine branch
+        id: branch
+        run: echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
+
+      - name: Set Dockerfile path for API
+        id: dockerfile
+        run: echo "::set-output name=dockerfile::api/Dockerfile"
+
+      - name: Extract metadata (tags, labels) for API Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/shm-api:${{ steps.branch.outputs.branch }}
+
+      - name: Build and push API Docker image
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: ./api
+          file: ${{ steps.dockerfile.outputs.dockerfile }}
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/shm-api:${{ steps.branch.outputs.branch }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  push_client_image:
+    name: Push Client Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Determine branch
+        id: branch
+        run: echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
+
+      - name: Set Dockerfile path for Client
+        id: dockerfile
+        run: echo "::set-output name=dockerfile::client/Dockerfile"
+
+      - name: Extract metadata (tags, labels) for Client Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/shm-client:${{ steps.branch.outputs.branch }}
+
+      - name: Build and push Client Docker image
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: ./client
+          file: ${{ steps.dockerfile.outputs.dockerfile }}
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/shm-client:${{ steps.branch.outputs.branch }}
+          labels: ${{ steps.meta.outputs.labels }}
