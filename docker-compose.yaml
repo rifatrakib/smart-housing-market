@@ -1,10 +1,7 @@
 services:
   client:
     container_name: client
-    build:
-      context: ./client
-    working_dir: /client
-    command: npm run dev -- --host
+    image: rifatrakib/shm-client:test
     volumes:
       - ./client:/client
       - /client/node_modules
@@ -18,10 +15,7 @@ services:
 
   api:
     container_name: api
-    build:
-      context: ./api
-    working_dir: /api
-    command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+    image: rifatrakib/shm-api:test
     env_file:
       - api/.env
     volumes:
