@@ -13,6 +13,28 @@ class Modes(str, Enum):
     STAGING = "staging"
 
 
+def prepare_docker_compose_file(mode: str):
+    try:
+        with open(f"compose-templates/{mode}.yaml") as file:
+            config = file.read()
+    except FileNotFoundError:
+        raise FileNotFoundError("Docker compose template not found for the specified mode")
+
+    with open("docker-compose.yaml", "w") as file:
+        file.write(config)
+
+
+def prepare_env_file(mode: str):
+    try:
+        with open(f"api/secrets/{mode}.json") as file:
+            secrets = json.load(file)
+    except FileNotFoundError:
+        raise FileNotFoundError("Secrets file not found for the specified mode")
+
+    with open("api/.env", "w") as file:
+        file.write("\n".join([f"{key}={value}" for key, value in secrets.items()]))
+
+
 @app.command(name="deploy")
 def deploy_applications(
     mode: Modes = Option(
@@ -24,14 +46,11 @@ def deploy_applications(
     print(f"Deploying applications in {mode.value} mode ...")
 
     try:
-        with open(f"api/secrets/{mode.value}.json") as file:
-            secrets = json.load(file)
-    except FileNotFoundError:
-        print(f"Secrets file not found for {mode.value} mode")
+        prepare_docker_compose_file(mode.value)
+        prepare_env_file(mode.value)
+    except FileNotFoundError as e:
+        print(e.args[0])
         return
-
-    with open("api/.env", "w") as file:
-        file.write("\n".join([f"{key}={value}" for key, value in secrets.items()]))
 
     subprocess.run("docker compose up --build -d", shell=True)
 
